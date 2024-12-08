@@ -170,6 +170,7 @@ function draw() {
       if(index === 0) {
         // on a le premier véhicule
         // il suite la cible controlée par la souris
+        v.applyBehaviors(target, obstacles, vehicules);
         steeringForce = v.arrive(target,0);
       } else {
         // Le vehicule d'index "index" suit le véhicule précédent
@@ -181,7 +182,7 @@ function draw() {
         //strokeWeight(vehicle.r*2);
         //line(vehiculePrecedent.pos.x, vehiculePrecedent.pos.y, vehicle.pos.x, vehicle.pos.y);
       }
-
+      v.applyBehaviors(target, obstacles, vehicules);
       v.applyForce(steeringForce);
       v.update();
       v.show();
