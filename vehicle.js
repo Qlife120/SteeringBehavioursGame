@@ -6,11 +6,11 @@ class Vehicle{
         this.vel = createVector(0,0);
         this.acc = createVector(0,0);
         // vitesse max du vehicule
-        this.maxSpeed = 7;
+        this.maxSpeed = 10;
         // force max applique au vehicule 
-        this.maxForce = 0.25;
+        this.maxForce = 0.6;
         this.color = "white";
-
+        this.rayonZoneDeFreinage = 100;
         this.r_dessin = 20;
 
         this.r = this.r_dessin*3;
@@ -34,7 +34,7 @@ class Vehicle{
         let boundariesForce = this.boundaries();
         
 
-        seekForce.mult(0.2);
+        seekForce.mult(0.5);
         //arriveForce.mult(18 );
         avoidForce.mult(3);
         separateForce.mult(0.2);
@@ -135,32 +135,47 @@ class Vehicle{
 
     }
 
-    arrive(target){
+    arrive(target, d=0){
         // true pour activer l'arrivee
-        return this.seek(target,true);
+        return this.seek(target,true,d);
     }
 
-    seek(target,arrival = false){
-        let force = p5.Vector.sub(target,this.pos);
-        let desiredSpeed = this.maxSpeed;
-        // si le comportement arrive est active 
-        if(arrival){
-            // on definit un rayon de freinage de 100
-            let slowRadius = 100;
-            let distance = force.mag();
-            // si la distance est plus petite que le rayon de freinage
-            if(distance < slowRadius){
-                
-                desiredSpeed = map(distance,0,slowRadius,0,this.maxSpeed);
-            }
-
+    seek(target, arrival, d = 0) {
+        let desiredSpeed = p5.Vector.sub(target, this.pos);
+        let desiredSpeedMagnitude = this.maxSpeed;
+    
+        if (arrival) {
+          // on dessine un cercle de rayon 100 
+          // centré sur le point d'arrivée
+    
+          if (Vehicle.debug) {
+            noFill();
+            stroke("white")
+            circle(target.x, target.y, this.rayonZoneDeFreinage)
+          }
+          
+          // on calcule la distance du véhicule
+          // par rapport au centre du cercle
+          const dist = p5.Vector.dist(this.pos, target);
+    
+          if (dist < this.rayonZoneDeFreinage) {
+            // on va diminuer de manière proportionnelle à
+            // la distance, la vitesse
+            // on va utiliser la fonction map(...) de P5
+            // qui permet de modifier une valeur dans un 
+            // intervalle initial, vers la même valeur dans un
+            // autre intervalle
+            // newVal = map(value, start1, stop1, start2, stop2, [withinBounds])
+            desiredSpeedMagnitude = map(dist, d, this.rayonZoneDeFreinage, 0, this.maxSpeed)
+          }
         }
-        force.setMag(desiredSpeed);
-        force.sub(this.vel);
-        force.limit(this.maxForce);
-        return force;
+           // equation force = vitesseDesiree - vitesseActuelle
+    desiredSpeed.setMag(desiredSpeedMagnitude);
+    let force = p5.Vector.sub(desiredSpeed, this.vel);
+    // et on limite la force
+    force.limit(this.maxForce);
+    return force;
     }
-
     // TODO : it's never called 
 
     flee(target){
@@ -329,7 +344,6 @@ drawVehicle() {
   
     // Dessin d'un véhicule sous la forme d'un triangle. Comme s'il était droit, avec le 0, 0 en haut à gauche
     triangle(-this.r_pourDessin, -this.r_pourDessin / 2, -this.r_pourDessin, this.r_pourDessin / 2, this.r_pourDessin, 0);
-    // Que fait cette ligne ?
     //this.edges();
   
     // cercle pour le debug

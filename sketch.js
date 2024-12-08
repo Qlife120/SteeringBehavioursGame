@@ -9,6 +9,8 @@ let difficultySelect;
 // distance de collision (beginner par defaut)
 let collisionThreshold = 50;
 
+let mode = "normal";
+
 function createDifficultSelector(){
 
     // Create a select dropdown for difficulty
@@ -161,7 +163,36 @@ function draw() {
     o.show();
   });
 
+  if( mode=="snake"){
+
+    vehicules.forEach((v, index, vehicles) => {
+
+      if(index === 0) {
+        // on a le premier véhicule
+        // il suite la cible controlée par la souris
+        steeringForce = v.arrive(target,0);
+      } else {
+        // Le vehicule d'index "index" suit le véhicule précédent
+        let vehiculePrecedent = vehicles[index - 1];
+        steeringForce = v.arrive(vehiculePrecedent.pos,10);
+
+        // Je relie les véhicules entre eux avec une ligne
+        //stroke(255);
+        //strokeWeight(vehicle.r*2);
+        //line(vehiculePrecedent.pos.x, vehiculePrecedent.pos.y, vehicle.pos.x, vehicle.pos.y);
+      }
+
+      v.applyForce(steeringForce);
+      v.update();
+      v.show();
+      
+    })
+
+
+
+  }else if(mode="normal "){
   vehicules.forEach(v => {
+    
     // pursuer = le véhicule poursuiveur, il vise un point devant la cible
     v.applyBehaviors(target, obstacles, vehicules);
 
@@ -169,7 +200,7 @@ function draw() {
     v.update();
     v.show();
   });
-
+}
   fill(255); 
   textSize(16); 
   // le nombre de boids restant
@@ -177,7 +208,7 @@ function draw() {
 }
 
 
-// en clickant sur la souris, on ajoute un obstacle de rayon et couleur aléatoire a la position de la souris
+// en cliquant sur la souris, on ajoute un obstacle de rayon et couleur aléatoire a la position de la souris
 function mousePressed() {
   // TODO : ajouter un obstacle de taille aléatoire à la position de la souris
   obstacles.push(new Obstacle(mouseX, mouseY, random(10, 100), color(random(255), random(255), random(255)), random(1, 3), random(1, 3)));
@@ -186,7 +217,12 @@ function mousePressed() {
 
 function keyPressed() {
 
-  
+  if (key == "s") {
+    mode = "snake";
+  }
+  else if (key == "n") {
+    mode = "normal ";
+  }
   if (key == "v") {
     vehicules.push(new Vehicle(random(width), random(height)));
   }
