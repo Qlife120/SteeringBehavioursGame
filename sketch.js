@@ -204,7 +204,13 @@ function draw() {
   fill(255); 
   textSize(16); 
   // le nombre de boids restant
-  text(`Boids left: ${flock.length}`, windowWidth - 150, height - 10); // bottom left of the canvas
+  text(`Boids left: ${flock.length}`, windowWidth - 150, height - 20); // bottom left of the canvas
+  text(
+    `Controls: s (Snake), d (Debug), n (Normal), f (Add 10 Vehicles)`,
+    windowWidth - 650,
+    height - 20
+  );
+    
 }
 
 

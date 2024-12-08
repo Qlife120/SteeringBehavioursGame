@@ -58,35 +58,3 @@ class Obstacle {
 
 
 
-
-
-
-// // je veux que les obstacles aient une vitessse de va et viens
-// class Obstacle{
-//     constructor(x,y,r,color){
-//         this.pos = createVector(x,y);
-//         this.r = r;
-//         this.color = color;
-//     }
-
-   
-//     show(){
-//         // Enregistrer le style actuelle 
-//         push();
-//         fill(this.color);
-//         // contour noire
-//         stroke("black");
-//         // largeur du contour
-//         strokeWeight(2);
-//         ellipse(this.pos.x,this.pos.y,this.r);
-//         // couleur noir de l'interieur
-//         fill(0);
-//         ellipse(this.pos.x,this.pos.y,this.r/2);
-//         pop();
-//     }
-
-
-
- 
-
-// }
