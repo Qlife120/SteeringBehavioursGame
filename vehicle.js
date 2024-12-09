@@ -34,7 +34,7 @@ class Vehicle{
         let boundariesForce = this.boundaries();
         
 
-        seekForce.mult(0.5);
+        seekForce.mult(0.2);
         //arriveForce.mult(18 );
         avoidForce.mult(3);
         separateForce.mult(0.2);

@@ -202,6 +202,7 @@ function draw() {
     v.show();
   });
 }
+
   fill(255); 
   textSize(16); 
   // le nombre de boids restant
